@@ -1,0 +1,18 @@
+apiVersion: keda.k8s.io/v1alpha1
+kind: ScaledObject
+metadata:
+ name: my-ScaledObject
+spec:
+ minReplicaCount: 2
+ maxReplicaCount: 10
+ pollingInterval: 15
+ scaleTargetRef:
+   kind: Deployment
+   name: nginx
+ triggers:
+ - type: prometheus
+   metadata:
+   serverAddress: http://prometheus:9090
+   query: sum(rate(http_requests_total{deployment="my-deployment"}[2m]))
+   threshold: '100.50'
+   activationThreshold: '5.5'
