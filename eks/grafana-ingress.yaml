@@ -1,0 +1,25 @@
+ # grafana-ingress
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: grafana-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx 
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  ingressClassName: "nginx"
+  rules:
+  - host: "grafana.example.in"
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: grafana
+            port:
+              number: 3000
+  tls:
+    - hosts:
+        - "ngrafana.example.in"
+      secretName: grafana-tls
