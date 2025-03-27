@@ -38,7 +38,7 @@ spec:
     spec:
       containers:
         - name: python
-          image: git.tutorcomplive.com/demo/python-main:2
+          image: git.tutorcomplive.com/demo/python-main:1
           ports:
             - containerPort: 5000
           envFrom:
