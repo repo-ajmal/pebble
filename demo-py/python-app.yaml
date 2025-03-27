@@ -1,0 +1,60 @@
+# python-configmap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: python
+data:
+  {}
+---
+# python-service
+apiVersion: v1
+kind: Service
+metadata:
+  name: python
+spec:
+  selector:
+    app: python
+  ports:
+    - name: http
+      protocol: TCP
+      port: 5000
+      targetPort: 5000
+  type: ClusterIP
+---
+# python-deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: python
+  template:
+    metadata:
+      labels:
+        app: python
+    spec:
+      containers:
+        - name: python
+          image: git.tutorcomplive.com/demo/python-main:2
+          ports:
+            - containerPort: 5000
+          envFrom:
+            - configMapRef:
+                name: python
+          resources: {}
+          env:
+          - name: MYSQL_HOST
+            value: "mysql"
+          - name: MYSQL_USER
+            value: "root"
+          - name: MYSQL_PASSWORD
+            value: "tcomp#mysql"
+          - name: MYSQL_DATABASE
+            value: "school"
+          - name: MYSQL_PORT
+            value: "3306"   
+      imagePullSecrets:
+      - name: regcred          
