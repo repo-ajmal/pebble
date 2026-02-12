@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-py
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: backend-py
+  template:
+    metadata:
+      labels:
+         app: backend-py
+    spec:
+      containers:
+        - name: backend-py
+          image: ajmalk/pebble:backend-0
+          ports:
+            - containerPort: 8000
+          resources: {}  

@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: postgres-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres-deployment
+  template:
+    metadata:
+      labels:
+        app: postgres-deployment 
+    spec:
+      containers:
+        - name: postgres-deployment
+          image: postgres:15
+          ports:
+           - containerPort: 5432
+          resources: {}
+          envFrom:
+            - secretRef:
+                name: postgres-secret 
+          volumeMounts:
+            - name: postgres-secret-volume
+              mountPath: "/etc/postgres-secret"
+              readOnly: true
+      volumes:
+        - name: postgres-secret-volume
+          secret:
+            secretName: postgres-secret       
